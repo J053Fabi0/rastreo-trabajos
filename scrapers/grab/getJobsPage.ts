@@ -31,12 +31,13 @@ export default async function getJobsPage(page: number): Promise<ToReturn> {
   for (const jobElement of jobElements) {
     const title = jobElement.querySelector("h2")?.innerText ?? null;
     const url = jobElement.querySelector("h2 > a")?.getAttribute("href") ?? null;
+    const description = jobElement.querySelector("ul.job-meta > li:nth-child(2)")?.innerText ?? "";
     if (title && url)
       jobs.push({
         title,
         date: now,
-        description: "",
         company: Company.GRAB,
+        description: description.trim(),
         url: `https://www.grab.careers${url}`,
       });
   }
