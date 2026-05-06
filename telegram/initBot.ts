@@ -22,7 +22,7 @@ bot.catch(({ ctx, error }) => {
 
 bot.start({ onStart: () => console.log("Bot started", getTime()) });
 
-bot.api.setMyCommands([{ command: "subscribe", description: "Suscribir a descuentos" }]);
+bot.api.setMyCommands([{ command: "test", description: "Test command" }]);
 
 // @ts-ignore sí funciona
 bot.api.config.use(autoRetry());
