@@ -2,7 +2,7 @@ import { curl } from "@spawn/curl";
 import { DOMParser } from "@b-fuze/deno-dom";
 import Job, { Company } from "../../data/models/job.model.ts";
 
-interface ToReturn {
+export interface ToReturn {
   jobs: Job[];
   hasNext: boolean;
 }
