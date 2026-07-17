@@ -4,6 +4,7 @@ import bot from "../telegram/initBot.ts";
 import Job from "../data/models/job.model.ts";
 import getJobCaption from "../utils/getJobCaption.ts";
 import getGrabJobs from "../scrapers/grab/getJobs.ts";
+import getVassJobs from "../scrapers/vass/getJobs.ts";
 import { FormattedString } from "@grammyjs/parse-mode";
 import getTelusJobs from "../scrapers/telus/getJobs.ts";
 import getAirwallexJobs from "../scrapers/airwallex/getJobs.ts";
@@ -29,6 +30,9 @@ export default async function checkJobs() {
 
   const telusJobs = await getTelusJobs().catch((e) => handleError(e, "telus no funciona"));
   if (telusJobs) allJobs.push(...telusJobs);
+
+  const vassJobs = await getVassJobs().catch((e) => handleError(e, "vass no funciona"));
+  if (vassJobs) allJobs.push(...vassJobs);
 
   const allDbJobs = await getAllJobs();
   const allDbJobsByUrl = new Map<string, Document<Job, string>>();

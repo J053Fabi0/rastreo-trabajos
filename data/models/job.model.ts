@@ -4,6 +4,7 @@ export enum Company {
   AIRWALLEX = "Airwallex",
   GRAB = "Grab",
   TELUS = "Telus",
+  VASS = "Vass",
 }
 
 export default interface Job extends KvObject {
