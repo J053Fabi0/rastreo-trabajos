@@ -1,5 +1,6 @@
 import { USERS_ID } from "../env.ts";
 import { Document } from "@olli/kvdex";
+import sleepS from "../utils/sleep.ts";
 import bot from "../telegram/initBot.ts";
 import Job from "../data/models/job.model.ts";
 import getJobCaption from "../utils/getJobCaption.ts";
@@ -8,6 +9,7 @@ import getVassJobs from "../scrapers/vass/getJobs.ts";
 import { FormattedString } from "@grammyjs/parse-mode";
 import getTelusJobs from "../scrapers/telus/getJobs.ts";
 import getAirwallexJobs from "../scrapers/airwallex/getJobs.ts";
+import getThoughtworsJobs from "../scrapers/thoughtworks/getJobs.ts";
 import { addJob, getAllJobs } from "../data/controllers/jobs.controller.ts";
 
 // deno-lint-ignore no-explicit-any
@@ -34,6 +36,9 @@ export default async function checkJobs() {
   const vassJobs = await getVassJobs().catch((e) => handleError(e, "vass no funciona"));
   if (vassJobs) allJobs.push(...vassJobs);
 
+  const thoughtworksJobs = await getThoughtworsJobs().catch((e) => handleError(e, "thoughtworks no funciona"));
+  if (thoughtworksJobs) allJobs.push(...thoughtworksJobs);
+
   const allDbJobs = await getAllJobs();
   const allDbJobsByUrl = new Map<string, Document<Job, string>>();
   for (const j of allDbJobs) allDbJobsByUrl.set(j.value.url, j);
@@ -49,11 +54,13 @@ export default async function checkJobs() {
   }
 
   for (const user of USERS_ID)
-    for (const c of messagesToSend)
+    for (const c of messagesToSend) {
+      await sleepS(2);
       await bot.api
         .sendMessage(user, c.caption, {
           entities: c.entities,
           link_preview_options: { is_disabled: true },
         })
         .catch((e) => handleError(e, "sendMessage failed"));
+    }
 }
